@@ -1,0 +1,48 @@
+{
+  "objects_detection_events": [
+    {
+      "vehicle_id": "ebab5f787798416fb2b8afc1340d7a4e",
+      "detection_time": "2022-06-05T21:02:34.546Z",
+      "detections": [
+        {
+          "object_type": "pedestrians",
+          "object_value": 3
+        },
+        {
+          "object_type": "cars",
+          "object_value": 2
+        },
+        {
+          "object_type": "signs",
+          "object_value": 3
+        }
+      ]
+      "object_type": "pedestrians",
+      "object_value": 3
+    },
+    {
+      "vehicle_id": "ebab5f787798416fb2b8afc1340d7a4e",
+      "detection_time": "2022-06-05T21:05:20.590Z",
+      "detections": [
+        {
+          "object_type": "cars",
+          "object_value": 4
+        }
+      ]
+    },
+    {
+      "vehicle_id": "ebab5f787798416fb2b8afc1340d7a4e",
+      "detection_time": "2022-06-05T21:11:35.567Z",
+      "detections": [
+        {
+          "object_type": "trucks",
+          "object_value": 5
+        },
+        {
+          "object_type": "obstacles",
+          "object_value": 2
+        }
+      ]
+    }
+  ]
+}
