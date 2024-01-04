@@ -1,6 +1,5 @@
 import os
 import datetime
-import pytz
 import json
 
 import sqlalchemy as sa

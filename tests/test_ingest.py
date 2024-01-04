@@ -30,9 +30,9 @@ def test_ingest_detections():
 
     vid = "ebab5f787798416fb2b8afc1340d7a4e"
     times = [
-        datetime.datetime.strptime("2022-06-05T21:02:34.546Z", "%Y-%m-%dT%H:%M:%S.%fZ", pytz.UTC),
-        datetime.datetime.strptime("2022-06-05T21:05:20.590Z", "%Y-%m-%dT%H:%M:%S.%fZ", pytz.UTC),
-        datetime.datetime.strptime("2022-06-05T21:11:35.567Z", "%Y-%m-%dT%H:%M:%S.%fZ", pytz.UTC),
+        datetime.datetime.strptime("2022-06-05T21:02:34.546Z", "%Y-%m-%dT%H:%M:%S.%fZ"),
+        datetime.datetime.strptime("2022-06-05T21:05:20.590Z", "%Y-%m-%dT%H:%M:%S.%fZ"),
+        datetime.datetime.strptime("2022-06-05T21:11:35.567Z", "%Y-%m-%dT%H:%M:%S.%fZ"),
     ]
     objects = [["pedestrians", "cars", "signs"], ["cars"], ["trucks", "obstacles"]]
 
