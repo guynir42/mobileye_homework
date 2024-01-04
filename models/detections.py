@@ -4,6 +4,9 @@ from models.base import Base
 
 
 class Detection(Base):
+
+    __tablename__ = "detections"
+
     id = sa.Column(
         sa.BigInteger,
         primary_key=True,

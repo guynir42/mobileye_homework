@@ -1,8 +1,13 @@
+import os.path
+
 import sqlalchemy as sa
 from sqlalchemy import func, orm
 from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy_utils import database_exists, create_database
 
 from contextlib import contextmanager
+
+CODE_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 utcnow = func.timezone("UTC", func.current_timestamp())
 
@@ -32,6 +37,10 @@ def Session():
         _engine = sa.create_engine(url, future=True, poolclass=sa.pool.NullPool)
 
         _Session = sessionmaker(bind=_engine, expire_on_commit=False)
+
+        if not database_exists(_engine.url):
+            create_database(_engine.url)
+            Base.metadata.create_all(_engine)
 
     session = _Session()
 
@@ -91,4 +100,7 @@ Base = declarative_base(cls=MyBase)
 
 
 if __name__ == "__main__":
-    pass
+    from alembic import command
+    from alembic.config import Config
+
+    session = Session()

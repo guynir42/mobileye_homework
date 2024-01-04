@@ -4,6 +4,9 @@ from models.base import Base
 
 
 class Report(Base):
+
+    __tablename__ = "reports"
+
     id = sa.Column(
         sa.BigInteger,
         primary_key=True,
