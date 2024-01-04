@@ -25,12 +25,13 @@ def test_watcher_new_files():
             "ebab5f787798416fb2b8afc1340d7a4e",
             "ebae3f787798416fb2b8afc1340d7a6d",
             "qbae3f787798416fb2b8afc1340ddf19",
+            "foo bar",  # this one from the wrong input tests...
         ]
 
         # clear the database
         with SmartSession() as session:
             vehicles = session.scalars(sa.select(Vehicle).where(Vehicle.id.in_(vehicle_ids))).all()
-            assert len(vehicles) <= 3  # vehicle ids are unique!
+            assert len(vehicles) <= 4  # vehicle ids are unique!
             [session.delete(v) for v in vehicles]
             session.commit()
 
