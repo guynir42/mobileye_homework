@@ -3,12 +3,12 @@
     {
       "vehicle_id": "ebab5f787798416fb2b8afc1340d7a4e",
       "report_time": "2022-05-05T22:02:34.546Z",
-      "status": "driving",
+      "status": "driving"
     },
     {
       "vehicle_id": "ebae3f787798416fb2b8afc1340d7a6d",
       "report_time": "2022-05-06T00:02:34.546Z",
-      "status": "accident",
+      "status": "accident"
     },
     {
       "vehicle_id": "qbae3f787798416fb2b8afc1340ddf19",

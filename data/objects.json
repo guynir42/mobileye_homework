@@ -15,10 +15,13 @@
         {
           "object_type": "signs",
           "object_value": 3
+        },
+        {
+          "object_type": "pedestrians",
+          "object_value": 3
         }
       ]
-      "object_type": "pedestrians",
-      "object_value": 3
+
     },
     {
       "vehicle_id": "ebab5f787798416fb2b8afc1340d7a4e",
