@@ -60,7 +60,7 @@ def test_ingest_detections():
 
 def test_illegal_object_type():
     data = dict(
-        object_detection_events=[
+        objects_detection_events=[
             dict(
                 vehicle_id="foo bar",
                 detection_time="2020-01-01T00:00:00Z",
@@ -75,7 +75,7 @@ def test_illegal_object_type():
     assert any(["Invalid object type: wrong!" in err for err in status["errors"]])
 
     data = dict(
-        object_detection_key=data["object_detection_events"]
+        objects_detection_key=data["objects_detection_events"]
     )  # copy of the data but with wrong top-level key
 
     # not the correct top-level key, should just skip over both reports and detections
