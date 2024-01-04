@@ -28,7 +28,7 @@ def Session():
 
     if _Session is None:
         # TODO: user must create an empty database named 'mobileye_hw' in postgresql
-        url = 'postgresql://postgres@localhost:5432/mobileye_hw'
+        url = 'postgresql://postgres:postgres@localhost:5432/mobileye_hw'
         _engine = sa.create_engine(url, future=True, poolclass=sa.pool.NullPool)
 
         _Session = sessionmaker(bind=_engine, expire_on_commit=False)
