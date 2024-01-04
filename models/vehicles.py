@@ -1,4 +1,3 @@
-
 import sqlalchemy as sa
 
 from models.base import Base
@@ -6,7 +5,7 @@ from models.base import Base
 
 class Vehicle(Base):
 
-    __tablename__ = 'vehicles'
+    __tablename__ = "vehicles"
 
     id = sa.Column(
         sa.String,
@@ -16,17 +15,17 @@ class Vehicle(Base):
     )
 
     detections = sa.orm.relationship(
-        'Detection',
-        back_populates='vehicle',
-        cascade='all, delete, delete-orphan',
+        "Detection",
+        back_populates="vehicle",
+        cascade="all, delete, delete-orphan",
         passive_deletes=True,
         doc="List of detections of the vehicle",
     )
 
     reports = sa.orm.relationship(
-        'Report',
-        back_populates='vehicle',
-        cascade='all, delete, delete-orphan',
+        "Report",
+        back_populates="vehicle",
+        cascade="all, delete, delete-orphan",
         passive_deletes=True,
         doc="List of reports of the vehicle",
     )

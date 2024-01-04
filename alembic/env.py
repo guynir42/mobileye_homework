@@ -65,8 +65,7 @@ def run_migrations_online() -> None:
     """
     with SmartSession() as session:
         context.configure(
-            connection=session.connection(),
-            target_metadata=Base.metadata
+            connection=session.connection(), target_metadata=Base.metadata
         )
 
         with context.begin_transaction():

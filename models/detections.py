@@ -14,15 +14,15 @@ class Detection(Base):
 
     vehicle_id = sa.Column(
         sa.String,
-        sa.ForeignKey('vehicles.id', ondelete='CASCADE'),
+        sa.ForeignKey("vehicles.id", ondelete="CASCADE"),
         nullable=False,
         index=True,
         doc="ID of the vehicle this detection is associated with",
     )
 
     vehicle = sa.orm.relationship(
-        'Vehicle',
-        back_populates='detections',
+        "Vehicle",
+        back_populates="detections",
         doc="Vehicle this detection is associated with",
     )
 
@@ -53,7 +53,7 @@ def __setattr__(self, key, value):
     Check inputs to this object.
     """
     # TODO: this is nice but it is better to enforce enum-type strings at the DB level
-    if key == 'type' and value not in ['pedestrians', 'cars', 'signs']:
-        raise ValueError(f'Invalid object type: {value}')
+    if key == "type" and value not in ["pedestrians", "cars", "signs"]:
+        raise ValueError(f"Invalid object type: {value}")
 
     super().__setattr__(key, value)
