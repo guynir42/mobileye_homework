@@ -50,13 +50,18 @@ class Detection(Base):
         doc="Timestamp of the detection. ",
     )
 
+    def __setattr__(self, key, value):
+        """
+        Check inputs to this object.
+        """
+        # TODO: this is nice but it is better to enforce enum-type strings at the DB level
+        if key == "type" and value not in [
+            "pedestrians",
+            "cars",
+            "signs",
+            "trucks",
+            "obstacles",
+        ]:
+            raise ValueError(f"Invalid object type: {value}")
 
-def __setattr__(self, key, value):
-    """
-    Check inputs to this object.
-    """
-    # TODO: this is nice but it is better to enforce enum-type strings at the DB level
-    if key == "type" and value not in ["pedestrians", "cars", "signs"]:
-        raise ValueError(f"Invalid object type: {value}")
-
-    super().__setattr__(key, value)
+        super().__setattr__(key, value)

@@ -1,4 +1,5 @@
 import json
+import traceback
 import sqlalchemy as sa
 
 from models.base import SmartSession
@@ -83,17 +84,17 @@ def ingest(data, session=None):
     try:
         try:
             data_dict = json.loads(data)
-        except Exception as e:
+        except Exception:
             status_report["status"] = "failure"
-            status_report["errors"] = f"Could not parse data: {e}"
+            status_report["errors"] = f"Could not parse data: {traceback.format_exc()}"
             return  # will go to finally and return the status_report from there
 
         # are we allowing a file to have both detections and reports? if not, turn into an if-else
         if "vehicle_status" in data_dict.keys():  # we got a file with status reports:
             ingest_reports(data_dict["vehicle_status"], status_report, session=session)
-        if "object_detection_events" in data_dict.keys():
+        if "objects_detection_events" in data_dict.keys():
             ingest_detections(
-                data_dict["object_detection_events"], status_report, session=session
+                data_dict["objects_detection_events"], status_report, session=session
             )
 
     finally:
@@ -136,20 +137,24 @@ def ingest_reports(report_list, status_report=None, session=None):
                     db_report = Report(
                         vehicle=vehicle,
                         status=report["status"],
-                        timestamp=report["timestamp"],
+                        timestamp=report["report_time"],
                     )
                     session.add(db_report)
                     status_report["reports saved"] += 1
-                except Exception as e:
+                except Exception:
                     status_report["status"] = "failure"
-                    status_report["errors"].append(f"Could not save report: {e}")
+                    status_report["errors"].append(
+                        f"Could not save report: {traceback.format_exc()}"
+                    )
                     return
 
             session.commit()
 
-    except Exception as e:
+    except Exception:
         status_report["status"] = "failure"
-        status_report["errors"].append(f"Could not save reports: {e}")
+        status_report["errors"].append(
+            f"Could not save reports: {traceback.format_exc()}"
+        )
 
 
 def ingest_detections(event_list, status_report=None, session=None):
@@ -189,7 +194,7 @@ def ingest_detections(event_list, status_report=None, session=None):
             for event in event_list:
                 try:
                     vehicle = get_vehicle(event["vehicle_id"], session=session)
-                    time = event["timestamp"]
+                    time = event["detection_time"]
                     for detection in event["detections"]:
                         try:
                             # TODO: this would be a great place to check for duplicates!
@@ -201,20 +206,24 @@ def ingest_detections(event_list, status_report=None, session=None):
                             )
                             session.add(db_detection)
                             status_report["detections saved"] += 1
-                        except Exception as e:
+                        except Exception:
                             status_report["status"] = "failure"
                             status_report["errors"].append(
-                                f"Could not save detection: {e}"
+                                f"Could not save detection: {traceback.format_exc()}"
                             )
                             return
 
-                except Exception as e:
+                except Exception:
                     status_report["status"] = "failure"
-                    status_report["errors"].append(f"Could not save event: {e}")
+                    status_report["errors"].append(
+                        f"Could not save event: {traceback.format_exc()}"
+                    )
                     return
 
             session.commit()
 
-    except Exception as e:
+    except Exception:
         status_report["status"] = "failure"
-        status_report["errors"].append(f"Could not save reports: {e}")
+        status_report["errors"].append(
+            f"Could not save reports: {traceback.format_exc()}"
+        )

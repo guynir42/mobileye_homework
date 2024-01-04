@@ -25,7 +25,8 @@ class Report(Base):
 
     vehicle = sa.orm.relationship(
         "Vehicle",
-        back_populates="detections",
+        uselist=False,
+        back_populates="reports",
         doc="Vehicle this report is associated with",
     )
 
@@ -43,13 +44,12 @@ class Report(Base):
         doc="Timestamp of the report. ",
     )
 
+    def __setattr__(self, key, value):
+        """
+        Check inputs to this object.
+        """
+        # TODO: this is nice but it is better to enforce enum-type strings at the DB level
+        if key == "status" and value not in ["parking", "driving", "accident"]:
+            raise ValueError(f"Invalid status value: {value}")
 
-def __setattr__(self, key, value):
-    """
-    Check inputs to this object.
-    """
-    # TODO: this is nice but it is better to enforce enum-type strings at the DB level
-    if key == "status" and value not in ["parking", "driving", "accident"]:
-        raise ValueError(f"Invalid status value: {value}")
-
-    super().__setattr__(key, value)
+        super().__setattr__(key, value)
