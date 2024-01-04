@@ -41,9 +41,7 @@ def get_vehicle(vehicle_id, session=None):
         The vehicle object with the given ID.
     """
     with SmartSession(session) as session:
-        vehicle = session.scalars(
-            sa.select(Vehicle).where(Vehicle.id == vehicle_id)
-        ).first()
+        vehicle = session.scalars(sa.select(Vehicle).where(Vehicle.id == vehicle_id)).first()
         if vehicle is None:
             vehicle = Vehicle(id=vehicle_id)
 
@@ -86,16 +84,14 @@ def ingest(data, session=None):
             data_dict = json.loads(data)
         except Exception:
             status_report["status"] = "failure"
-            status_report["errors"] = f"Could not parse data: {traceback.format_exc()}"
+            status_report["errors"].append(f"Could not parse data: {traceback.format_exc()}")
             return  # will go to finally and return the status_report from there
 
         # are we allowing a file to have both detections and reports? if not, turn into an if-else
         if "vehicle_status" in data_dict.keys():  # we got a file with status reports:
             ingest_reports(data_dict["vehicle_status"], status_report, session=session)
         if "objects_detection_events" in data_dict.keys():
-            ingest_detections(
-                data_dict["objects_detection_events"], status_report, session=session
-            )
+            ingest_detections(data_dict["objects_detection_events"], status_report, session=session)
 
     finally:
         return status_report  # will accumulate errors along the way
@@ -143,18 +139,14 @@ def ingest_reports(report_list, status_report=None, session=None):
                     status_report["reports saved"] += 1
                 except Exception:
                     status_report["status"] = "failure"
-                    status_report["errors"].append(
-                        f"Could not save report: {traceback.format_exc()}"
-                    )
+                    status_report["errors"].append(f"Could not save report: {traceback.format_exc()}")
                     return
 
             session.commit()
 
     except Exception:
         status_report["status"] = "failure"
-        status_report["errors"].append(
-            f"Could not save reports: {traceback.format_exc()}"
-        )
+        status_report["errors"].append(f"Could not save reports: {traceback.format_exc()}")
 
 
 def ingest_detections(event_list, status_report=None, session=None):
@@ -208,22 +200,16 @@ def ingest_detections(event_list, status_report=None, session=None):
                             status_report["detections saved"] += 1
                         except Exception:
                             status_report["status"] = "failure"
-                            status_report["errors"].append(
-                                f"Could not save detection: {traceback.format_exc()}"
-                            )
+                            status_report["errors"].append(f"Could not save detection: {traceback.format_exc()}")
                             return
 
                 except Exception:
                     status_report["status"] = "failure"
-                    status_report["errors"].append(
-                        f"Could not save event: {traceback.format_exc()}"
-                    )
+                    status_report["errors"].append(f"Could not save event: {traceback.format_exc()}")
                     return
 
             session.commit()
 
     except Exception:
         status_report["status"] = "failure"
-        status_report["errors"].append(
-            f"Could not save reports: {traceback.format_exc()}"
-        )
+        status_report["errors"].append(f"Could not save reports: {traceback.format_exc()}")

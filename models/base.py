@@ -66,10 +66,7 @@ def SmartSession(*args):
         if arg is None:
             continue
         else:
-            raise TypeError(
-                "All inputs must be sqlalchemy sessions or None. "
-                f"Instead, got {args}"
-            )
+            raise TypeError("All inputs must be sqlalchemy sessions or None. " f"Instead, got {args}")
 
     # none of the given inputs managed to satisfy any of the conditions...
     # open a new session and close it when outer scope is done
@@ -100,7 +97,4 @@ Base = declarative_base(cls=MyBase)
 
 
 if __name__ == "__main__":
-    from alembic import command
-    from alembic.config import Config
-
     session = Session()

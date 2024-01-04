@@ -29,33 +29,23 @@ def test_watcher_new_files():
 
         # clear the database
         with SmartSession() as session:
-            vehicles = session.scalars(
-                sa.select(Vehicle).where(Vehicle.id.in_(vehicle_ids))
-            ).all()
+            vehicles = session.scalars(sa.select(Vehicle).where(Vehicle.id.in_(vehicle_ids))).all()
             assert len(vehicles) <= 3  # vehicle ids are unique!
             [session.delete(v) for v in vehicles]
             session.commit()
 
-            vehicles = session.scalars(
-                sa.select(Vehicle).where(Vehicle.id.in_(vehicle_ids))
-            ).all()
+            vehicles = session.scalars(sa.select(Vehicle).where(Vehicle.id.in_(vehicle_ids))).all()
             assert len(vehicles) == 0
 
             # check the detections and reports are all gone, too
-            detections = session.scalars(
-                sa.select(Detection).where(Detection.vehicle_id.in_(vehicle_ids))
-            ).all()
+            detections = session.scalars(sa.select(Detection).where(Detection.vehicle_id.in_(vehicle_ids))).all()
             assert len(detections) == 0
 
-            reports = session.scalars(
-                sa.select(Report).where(Report.vehicle_id.in_(vehicle_ids))
-            ).all()
+            reports = session.scalars(sa.select(Report).where(Report.vehicle_id.in_(vehicle_ids))).all()
             assert len(reports) == 0
 
         p = Pool(1)
-        output = p.map_async(
-            partial(watcher, timeout=1, interval=0.1, delay=0.2), [temp_dir]
-        )
+        output = p.map_async(partial(watcher, timeout=1, interval=0.1, delay=0.2), [temp_dir])
         p.close()
         p.join()
         statuses = output.get()[0]
@@ -64,9 +54,7 @@ def test_watcher_new_files():
 
         # copy the demo files into the temp directory
         p = Pool(1)
-        output = p.map_async(
-            partial(watcher, timeout=1, interval=0.1, delay=0.2), [temp_dir]
-        )
+        output = p.map_async(partial(watcher, timeout=1, interval=0.1, delay=0.2), [temp_dir])
 
         data_dir = os.path.join(CODE_ROOT, "data")
         for f in os.listdir(data_dir):
@@ -94,23 +82,15 @@ def test_watcher_new_files():
 
         # check the DB contains the correct objects:
         with SmartSession() as session:
-            vehicles = session.scalars(
-                sa.select(Vehicle).where(Vehicle.id.in_(vehicle_ids))
-            ).all()
+            vehicles = session.scalars(sa.select(Vehicle).where(Vehicle.id.in_(vehicle_ids))).all()
             assert len(vehicles) == 3
 
             # check the detections
-            detections = session.scalars(
-                sa.select(Detection).where(Detection.vehicle_id.in_(vehicle_ids))
-            ).all()
+            detections = session.scalars(sa.select(Detection).where(Detection.vehicle_id.in_(vehicle_ids))).all()
             assert len(detections) == 7
-            assert {"pedestrians", "cars", "signs", "trucks", "obstacles"} == {
-                det.type for det in detections
-            }
+            assert {"pedestrians", "cars", "signs", "trucks", "obstacles"} == {det.type for det in detections}
 
-            reports = session.scalars(
-                sa.select(Report).where(Report.vehicle_id.in_(vehicle_ids))
-            ).all()
+            reports = session.scalars(sa.select(Report).where(Report.vehicle_id.in_(vehicle_ids))).all()
             assert len(reports) == 3
             assert {"parking", "driving", "accident"} == {rep.status for rep in reports}
 
